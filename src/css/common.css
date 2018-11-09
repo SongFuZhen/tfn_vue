@@ -1,0 +1,97 @@
+.main-client-margin-top{
+    margin-top: 16px;
+}
+.ivu-btn, .ivu-page-item, .ivu-page-item-jump-next, .ivu-page-item-jump-prev, .ivu-page-next, .ivu-page-prev, .ivu-input, .ivu-select-selection {
+    border-radius: 0px;
+}
+.ivu-btn-primary, .ivu-page-item-active{
+    background-color: #3498DB;
+    border-color: #3498DB;
+}
+.ivu-btn-primary:hover{
+    background-color: #5DADE2;
+    border-color: #5DADE2;
+}
+.ivu-btn-primary:active{
+    background-color: #2383C4;
+    border-color: #2383C4;
+}
+.single-page .ivu-card, .single-page .ivu-card:hover{
+    border: none;
+    border-radius: 0px;
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2);
+}
+.single-page .ivu-card .ivu-card-body .ivu-card{
+    border: none;
+    box-shadow: none;
+}
+/*.ivu-card-body{
+    padding: 40px 30px 0px 30px;
+}
+.ivu-card-body .ivu-card .ivu-card-body{
+    padding: 0px;
+}*/
+.ivu-form .ivu-form-item-label{
+    padding-right: 20px;
+}
+.ivu-table-wrapper{
+    border-color: #e9eaec;
+}
+.ivu-table:before, .ivu-table:after{
+    background-color: #e9eaec;
+}
+tr.ivu-table-row-hover td, tr.ivu-table-row-highlight.ivu-table-row-hover td{
+    background: #F7F8F8;
+}
+.ivu-select-dropdown{
+    margin: 0px;
+    border-radius: 0px;
+}
+.ivu-dropdown-item{
+    padding: 12px 16px;
+}
+.ivu-checkbox-inner{
+    border:1px solid #b3b4b7
+}
+.ivu-modal-mask{
+    background-color:rgba(55,55,55,.4)
+}
+.sms_content{
+    display: inline-block;
+    vertical-align: middle;
+    padding: 5px 0;
+    width: calc(100% - 30px);
+}
+.sms_content_ellipsis{
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    display: inline-block;
+    vertical-align: middle;
+    padding: 5px 0;
+    width: calc(100% - 30px);
+}
+.sms_content_icon{
+    width: 20px;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    color: rgb(73, 80, 96);
+}
+.sms_content_icon:hover{
+    color: #2b6cff;
+}
+.ivu-modal-content{
+    border-radius: 0px;
+    box-shadow: 0 0 2px 0 rgba(0,0,0,0.2);
+}
+.ivu-btn-info, .ivu-btn-info.active, .ivu-btn-info:active, .ivu-btn-info:hover{
+    background: #3498DB;
+    border-color: #3498DB;
+}
+.ivu-cascader .ivu-select-dropdown{
+    width: auto;
+    width: -webkit-max-content;
+    width: -moz-max-content;
+    width: max-content;
+}
