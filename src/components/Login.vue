@@ -58,13 +58,14 @@
         },
         methods: {
             submitForm(formName) {
+                const _this = window
+
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         const userName = this.$refs[formName].model.userName
                         const password = this.$refs[formName].model.password
 
-                        // var params = { 'userName': userName, 'password': password };
-                        var params = { 'userName': '100011', 'password': 'BQI6ZJED7P' };
+                        var params = { 'userName': userName, 'password': password };
                         var instance = axios.create({
                             headers: { 'content-type': 'application/json' }
                         });
@@ -72,8 +73,8 @@
                             var data = res.data;
 
                             if (data.code === 0) {
-                                window.$cookies.set('tfn_cookies', data.data.token, "1d")
-
+                                _this.$cookies.remove('tfn_cookies')
+                                _this.$cookies.set('tfn_cookies', data.data.token, "1d")
                                 VueRouter.push('/send_message')
                             } else {
                                 Notification({
@@ -99,10 +100,6 @@
 </script>
 
 <style>
-    body {
-        overflow: hidden;
-    }
-
     .ivu-table-row-highlight td {
         background: none
     }
