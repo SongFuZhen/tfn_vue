@@ -350,6 +350,7 @@
           shade: 0.4,
           dataIndex: 2,
           fadeTime: 0,
+          dataName: ['全部省', '市', '区'],
           dataModel: 'data',
           dataSource: this.app_area_data,
           showSelectHtml: '<li data-id="{code}" data-route="{route}" class="">{area}</li>',

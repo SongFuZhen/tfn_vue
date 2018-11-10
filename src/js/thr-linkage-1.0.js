@@ -67,7 +67,7 @@ function linkAgeSelect() {
                         '                <i class="thr-close thr-close-{id} fr lh30"></i>\n' +
                         '            </div>\n' +
                         '            <div class="thr-areas pd10">\n' +
-                        '                <h4 class="mtb5">您已选择<small class="fz12 fw">（最多可选择{maxChecked}个）</small><button class="fr thr-confirm">确定</button></h4>\n' +
+                        '                <h4 class="mtb5">您已选择<button class="fr thr-confirm">确定</button></h4>\n' +
                         '                <dl class="fz14 thr-select-area">\n' +
                         '                   {selectedList}' +
                         '                </dl>\n' +
@@ -79,7 +79,7 @@ function linkAgeSelect() {
                         '            </div>\n' +
                         '        </div>',
                     showListHtml: '<div class="thr-list-area thr-list-{index} fz14 mt10 fl" data-index="{index}" {display}>\n' +
-                        '                <ul>\n' +
+                        '                <ul style="padding-left: 0;">\n' +
                         '                    <li class="fz16 thr-name">{name}</li>\n' +
                         '                    {volistItem}' +
                         '                </ul>\n' +
@@ -169,6 +169,7 @@ function linkAgeSelect() {
                     }
 
                     var thisHtml = $thisSys.showHtml;
+
                     //替换
                     thisHtml = thisHtml.replace(/{id}/g, $thisSys.id);
                     thisHtml = thisHtml.replace(/{z_index}/g, $thisSys.zIndex);
@@ -178,6 +179,8 @@ function linkAgeSelect() {
                     thisHtml = thisHtml.replace(/{selectList}/g, loopSelectBoxInit($thisSys));
                     //遍历已选择项
                     if ($thisSys.selectedValues.constructor == Array) {
+                        debugger
+
                         var selectedHtml = '';
                         for (var s in $thisSys.selectedValues) {
                             var selectedTpl = $thisSys.showCheckedHtml;
@@ -190,8 +193,10 @@ function linkAgeSelect() {
                     } else {
                         thisHtml = thisHtml.replace(/{selectedList}/g, '');
                     }
+
                     //输出
                     $(areaItem).append(thisHtml);
+                    
                     //显示
                     $(thisBoxId).fadeIn($thisSys.fadeTime);
 
