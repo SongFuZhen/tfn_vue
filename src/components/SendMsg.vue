@@ -16,11 +16,12 @@
 
           <p>编辑短信:</p>
 
-          <el-input type='textarea' :rows="4" placeholder="编辑短信内容" @input="handleInputMessageContent" v-model="messageContent">
+          <el-input type='textarea' :rows="4" resize ='none' placeholder="编辑短信内容" @input="handleInputMessageContent" v-model="messageContent">
           </el-input>
 
           <div style="text-align: right;margin-top: 20px;">
             <span>共计{{messageCount}}个字</span>
+            <span>,共 {{messageNum}} 条</span>
 
             <el-select v-model="backSignValue" filterable @change="handleSelctedBackSign">
               <el-option key="" label="" value=""></el-option>
@@ -34,14 +35,14 @@
       <el-col :span="12">
         <el-card shadow="hover" header='余额'>
           <div style="text-align: center">
-            <h1 style="color: steelblue;">¥ {{ amount }}</h1>
+            <h1 style="color: steelblue;">{{ amount }} 条</h1>
           </div>
         </el-card>
         <el-card shadow="hover" header='短信预览'>
-          <div>
-            <span v-if="signValue.length > 0"></span>【{{signValue}}】</span>
-            <span v-if="messageContent.length > 0"></span>{{messageContent}}</span>
-            <span v-if="backSignValue.length > 0"></span>{{backSignValue}}</span>
+          <div style="height: 54px;overflow: auto;">
+            <span v-if="signValue.length > 0">【{{signValue}}】</span>
+            <span v-if="messageContent.length > 0">{{messageContent}}</span>
+            <span v-if="backSignValue.length > 0">{{backSignValue}}</span>
           </div>
         </el-card>
       </el-col>
@@ -50,13 +51,14 @@
     <el-card shadow="hover" header='Step2: 选择运营商及号码归属地'>
       <el-row>
         <el-col :span="24">
-          <div style="margin-top: 5px;">
-            <span>运营商选择</span>
-            <el-radio-group v-model="ispValue" @change='handleChangeISP'>
-              <el-radio label="cm">移动</el-radio>
-              <el-radio label="cu">联通</el-radio>
-              <el-radio label="ct">电信</el-radio>
-            </el-radio-group>
+          <div style="margin-top: 5px; display: flex;">
+            <span style="margin-right: 20px;">运营商选择</span>
+            
+            <el-checkbox-group v-model="ispValue" @change='handleChangeISP'>
+              <el-checkbox key="cm" label="cm">移动</el-checkbox>
+              <el-checkbox key="cu" label="cu">联通</el-checkbox>
+              <el-checkbox key="ct" label="ct">电信</el-checkbox>
+            </el-checkbox-group>
           </div>
 
           <div style="margin-top: 20px;">
@@ -80,18 +82,18 @@
     </el-card>
 
     <el-row>
-      <el-card shadow="hover" header='Step3: 校验电话号码'>
+      <el-card shadow="hover" header='Step3: 校验电话号码' style="padding-bottom: 20px;">
         <el-col :span="12">
           <p>上传电话号码</p>
 
           <el-upload class="upload-demo" drag :show-file-list='false' :on-success="handleUploadSuccess" :on-error='handleUploadError'
             :on-change='handleChangeUpload' :data='uploadParams' :headers='uploadHeaders' action="http://47.96.119.87:9301/api/sendSMS/upload"
-            accept='.doc,.txt'>
+            accept='.xls,.xlsx,.txt'>
             <i class="el-icon-upload"></i>
             <div class="el-upload__text">将文件拖到此处，或
               <em>点击上传</em>
             </div>
-            <div class="el-upload__tip" slot="tip">上传Excel, CSV, TXT, Word</div>
+            <div class="el-upload__tip" slot="tip">支持Excel,Txt文件</div>
           </el-upload>
         </el-col>
         <el-col :span="12" style="text-align: center">
@@ -170,14 +172,15 @@
         signDataList: [],
 
         messageContent: '',
-        messageCount: 6,
+        messageCount: 4,
+        messageNum: 1,
 
         inputSignValue: '',
         signValue: '',
 
         backSignValue: '回T退订',
 
-        ispValue: 'cm',
+        ispValue: ['cm'],
 
         app_area_data: areaData,
 
@@ -229,22 +232,13 @@
 
       createFilter(queryString) {
         return (signData) => {
-          return (signData.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+          return (signData.value.toLowerCase().indexOf(queryString.substring(0, 2).toLowerCase()) === 0);
         }
       },
 
       handleBlurSign(e) {
         this.inputSignValue = e.target.value
-      },
-
-      handleSelect(item) {
-        this.getCityCode(item.value)
-
-        if (this.inputSignValue !== '') {
-          this.signValue = this.inputSignValue
-        } else {
-          this.signValue = item.value
-        }
+        this.$set(this, 'selectedCityDatas', [])
       },
 
       getAmount() {
@@ -319,14 +313,30 @@
 
       handleInputMessageContent(value) {
         this.messageContent = value
-        this.messageCount = this.messageContent.length
+        this.messageCount = this.messageContent.length + this.signValue.length + 2 + this.backSignValue.length
+        this.messageNum = Math.ceil(this.messageCount / 70)
+      },
+
+      handleSelect(item) {
+        this.getCityCode(item.value)
+
+        if (this.inputSignValue !== '') {
+          this.signValue = this.inputSignValue
+        } else {
+          this.signValue = item.value
+        }
+
+        this.messageCount = this.messageContent.length + this.signValue.length + 2 + this.backSignValue.length
+        this.messageNum = Math.ceil(this.messageCount / 70)
       },
 
       handleSelctedBackSign(value) {
         this.backSignValue = value
 
         this.messageContent += value
-        this.messageCount = this.messageContent.length
+        this.messageCount = this.messageContent.length + this.signValue.length + 2 + this.backSignValue.length
+
+        this.messageNum = Math.ceil(this.messageCount / 70)
       },
 
       handleChangeISP(value) {
@@ -393,7 +403,7 @@
       },
 
       handleChangeUpload(file) {
-        if (this.ispValue === null) {
+        if (this.ispValue.length <= 0) {
           this.$message.error('请选择运营商');
           return false
         }
@@ -406,7 +416,7 @@
         let selectedCityCodes = []
         this.selectedCityDatas.map(d => selectedCityCodes.push(d.id))
 
-        this.$set(this.uploadParams, 'operator', this.ispValue);
+        this.$set(this.uploadParams, 'operator', this.ispValue.join(','));
         this.$set(this.uploadParams, 'cityCodes', selectedCityCodes.join(','));
 
         return true
@@ -416,10 +426,15 @@
         const _this = this
         _this.confirmSendVisible = false
 
-        if ((Math.ceil(('【' + _this.signValue + '】' + _this.messageContent + _this.backSignValue).length / 70) * _this.uploadFilterSuccessNum) > parseInt(_this.amount, 0)) {
+        if (_this.messageNum > parseInt(_this.amount, 0)) {
           _this.$message.error('余额不足，请先充值')
           return
         }
+
+        // if ((Math.ceil(('【' + _this.signValue + '】' + _this.messageContent + _this.backSignValue).length / 70) * _this.uploadFilterSuccessNum) > parseInt(_this.amount, 0)) {
+        //   _this.$message.error('余额不足，请先充值')
+        //   return
+        // }
 
         const payloadData = {
           "content": '【' + _this.signValue + '】' + _this.messageContent + _this.backSignValue,

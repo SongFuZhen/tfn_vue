@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="loginDiv view" style="height: 925px;">
+        <div class="loginDiv view">
             <div class="wrap">
                 <div class="left">
                     <h1>天福诺短信群发平台</h1>
@@ -117,8 +117,10 @@
     }
 
     .loginDiv {
+        overflow: hidden;
         background: url(../assets/timg.jpg) no-repeat 50% 50%;
-        background-color: #1f2326
+        background-color: #1f2326;
+        height: 100vh;
     }
 
     .loginDiv .wrap {
@@ -175,8 +177,8 @@
     }
 
     .loginDiv .wrap .right .loginFrom {
-        width: 340px;
-        height: 300px;
+        width: 310px;
+        height: 320px;
         padding: 30px;
         background-color: #fff
     }
